@@ -1,0 +1,25 @@
+---
+- name: Customization Linux Ultramarine
+  hosts: localhost
+  connection: local
+  become: yes
+  become_method: sudo
+  vars:
+    user_name: patryk
+
+  roles:
+    - role: packages
+    - role: vscode
+    - role: docker
+    - role: brave
+    - role: system
+      vars:
+        user_name: "{{ user_name }}"
+    - role: gnome
+      vars:
+        user_name: "{{ user_name }}"
+    - role: tmux
+      vars:
+        user_name: "{{ user_name }}"
+
+
