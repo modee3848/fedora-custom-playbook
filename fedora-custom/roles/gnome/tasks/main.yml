@@ -1,0 +1,48 @@
+---
+- name: Timezone Europe/Warsaw
+  command:
+    cmd: timedatectl set-timezone Europe/Warsaw
+
+- name: Set automatic date and time
+  command: timedatectl set-ntp true
+  become: yes
+
+- name: GET UID {{ user_name }}
+  command: id -u {{ user_name }}
+  register: user_uid_result
+  changed_when: false
+
+- set_fact:
+    user_uid: "{{ user_uid_result.stdout }}"
+
+- name: Turn of automatic suspend on battery
+  command:
+    cmd: gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type 'nothing'
+  environment:
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ user_uid }}/bus"
+  become: yes
+  become_user: "{{ user_name }}"
+
+- name: Turn of automatic suspend on power supply
+  command:
+    cmd: gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
+  environment:
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ user_uid }}/bus"
+  become: yes
+  become_user: "{{ user_name }}"
+
+- name: Never turn off the screen
+  command:
+    cmd: gsettings set org.gnome.desktop.session idle-delay 0
+  environment:
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ user_uid }}/bus"
+  become: yes
+  become_user: "{{ user_name }}"
+
+- name: Enable screen dimming
+  command:
+    cmd: gsettings set org.gnome.settings-daemon.plugins.power idle-dim true
+  environment:
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ user_uid }}/bus"
+  become: yes
+  become_user: "{{ user_name }}"

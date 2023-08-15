@@ -1,0 +1,28 @@
+---
+- name: Update & upgrade
+  dnf:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: Installing necessary tools
+  dnf:
+    name:
+      - vim
+      - nano
+      - htop
+      - curl
+      - git
+      - wget
+      - nmap
+      - telnet
+      - tmux
+      - zip
+      - unzip
+      - traceroute
+    state: present
+
+- name: Install dnf-plugins-core (required for dnf config-manager)
+  dnf:
+    name: dnf-plugins-core
+    state: present

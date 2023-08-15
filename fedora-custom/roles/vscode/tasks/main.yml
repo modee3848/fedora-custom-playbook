@@ -1,0 +1,20 @@
+---
+- name: Import Visual Studio Code key
+  command:
+    cmd: sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+
+- name: Adding Visual Studio Code repo
+  copy:
+    content: |
+      [code]
+      name=Visual Studio Code
+      baseurl=https://packages.microsoft.com/yumrepos/vscode
+      enabled=1
+      gpgcheck=1
+      gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+    dest: /etc/yum.repos.d/vscode.repo
+
+- name: Installation Visual Studio Code
+  dnf:
+    name: code
+    state: present

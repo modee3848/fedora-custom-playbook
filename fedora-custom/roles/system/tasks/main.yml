@@ -1,0 +1,36 @@
+---
+
+- name: Create user {{ user_name }}
+  user:
+      name: "{{ user_name }}"
+      state: present
+      shell: /bin/bash
+
+- name: Add user {{ user_name }} to wheel group
+  user:
+      name: "{{ user_name }}"
+      groups: wheel
+      append: yes
+
+- name: Mute system sounds using amixer
+  command:
+    cmd: amixer -c 0 set Master mute
+  become: yes
+
+- name: GET UID {{ user_name }}
+  command: id -u {{ user_name }}
+  register: user_uid_result
+  changed_when: false
+
+- set_fact:
+    user_uid: "{{ user_uid_result.stdout }}"
+
+
+- name: Set mouse speed to 75% for GNOME
+  command:
+    cmd: gsettings set org.gnome.desktop.peripherals.mouse speed 0.5
+  environment:
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ user_uid }}/bus"
+  become: yes
+  become_user: "{{ user_name }}"
+
