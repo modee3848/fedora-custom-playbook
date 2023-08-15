@@ -1,2 +1,4 @@
 # fedora-custom-playbook
 A simple playbook performing basic customization of systems based on the Fedora distribution
+
+The purpose of this ansible playbook was to automate tasks that I most frequently performed after a fresh installation of systems based on Fedora and the GNOME environment. These tasks include creating a new user and adding them to the wheel group (in this playbook, if the user doesn't provide a value for the variable, the user 'patryk' will be created by default), updating and upgrading the system, installing basic developer tools such as Git, Docker, and VSCode, fetching the tmux configuration from GitHub and applying it to the configured environment, downloading my preferred browser and setting it as the default, and adjusting power-saving settings like disabling automatic hibernation, enabling screen dimming after a certain period of inactivity, or settings related to mouse speed.
